@@ -1,4 +1,4 @@
-module shift_All (
+module shift_All #(parameter SISO=1, parameter SIPO=0, parameter PISO=0, parameter PIPO=0) (
                 /////clk-rst//////
                 input logic clk,
                 input logic rst,
@@ -13,3 +13,37 @@ module shift_All (
                 input logic [3:0] p_in,
                 output logic [3:0] p_out,
                 output logic p_rdy);
+
+///////creating a buffer///////////
+logic [3:0] x;
+
+////########################Serial Input ###########################?/////
+///////Serial In--Serial Out/////////////
+if(SISO==1) begin 
+  logic [2:0] n;
+always@(posedge clk, posedge rst)
+    begin 
+          if(rst) begin 
+              x <= '0;
+              s_out <= '0;
+              s_rdy <= '0;
+            end 
+          else begin 
+              s_rdy <= '1;
+              if(s_vld && s_rdy) begin 
+                    x <= {x[2:0],s_in};
+                    s_out <= x[3];
+                  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
