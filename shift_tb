@@ -1,0 +1,66 @@
+module shift_tb();
+
+                /////clk-rst//////
+                logic clk,rst;
+                //////serial in - out//////
+                logic s_in,s_vld, s_rdy,s_out;
+                ///// parallel In - Out/////
+                logic p_vld,p_rdy;
+                logic [3:0] p_in;
+                logic [3:0] p_out;
+
+parameter SISO=1, SIPO=0,PISO=0,PIPO=0;
+///Design Instatntiation//////////////
+shift #(.SISO(SISO),.SIPO(SIPO),.PISO(PISO),.PIPO(PIPO)) 
+        shift_unit(.clk(clk),.rst(rst),.s_vld(s_vld),.s_in(s_in),.s_rdy(s_rdy),.s_out(s_out),.p_vld(p_vld),.p_rdy(p_rdy),.p_in(p_in),.p_out(p_out));
+
+////////Sequence/////////
+if(SISO==1)
+begin 
+//////////Serial In- Serial Out////////////////
+initial 
+  begin 
+    #1 clk=1'b0;
+    forever begin 
+      #1 clk = ~clk;
+        end 
+    end 
+
+initial 
+    begin 
+    #1
+    rst=1'b0;
+    #1
+    rst=1'b1;
+    #1
+    rst=1'b0;
+    end
+initial 
+  begin 
+    #4
+    repeat(100)@(negedge clk)
+    begin 
+      if(s_rdy) begin 
+                  s_in=$random; s_vld=$random;
+                  $display($time,"s_vld= %d; s_in= %d; s_out = %4d;", s_vld,s_in,s_out);
+                  end 
+
+      else begin 
+        s_in =1'b0;
+        s_vld=1'b0;
+        end 
+      end 
+      #100 $finish;
+    end 
+end 
+
+
+
+
+
+
+
+
+
+
+    
