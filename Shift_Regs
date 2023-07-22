@@ -37,14 +37,80 @@ always@(posedge clk, posedge rst)
                   end
 end
 
+/////SIPO:Serial In: Parallel Out///
+if(SIPO==1) begin 
+  logic [2:0] n;
+always@(posedge clk, posedge rst)
+  begin 
+          if(rst)  begin 
+              x <= '0;
+              n <= '0;
+              s_rdy <= '0;
+            end 
+          else begin 
+            if(s_vld &&  n<4) begin 
+                x <= {x[2:0],s_in};
+                n <= n+1;
+                s_rdy <= '1;
+              if(n==3) s_rdy <= '0;
+              end 
+          else if(n==4) begin 
+                p_out <= x[3:0];
+                n <= '0;
+                s_rdy <= '1;
+                end 
+                end
+end
 
+end
 
+//////////////####PISO: paralle Input-- Serial Output//////
+if(PISO==1) begin 
+  logic [2:0] m;
+  always@(posedge clk, posedge rst)
+      begin 
+          if(rst) begin 
+                x <= '0;
+                m <= '0;
+                p_rdy <= '0;
+                s_out <= '0;
+                end
+        else begin 
+          if(p_vld && p_rdy && m==0) begin 
+            x <= p_in;
+            m <= m+4;
+            p_rdy <= '0;
+            end 
 
+        else if(m !=0) begin 
+        x <= x <<1;
+        s_out <= x[3];
+        m <= m-1;
+        if(m==1) p_rdy <= 1;
+            end
+      else p_rdy <= 1;
+      end
+end
 
+end
 
+/////////////Parallel-In & paralle OUT/////
+if(PIPO==1) begin 
+   always@(posedge clk, posedge rst)
+      begin 
+          if(rst)  x <= '0; 
+        else begin 
+          if(p_vld && p_rdy ) begin 
+            x <= p_in;
+            p_rdy <= '0;
+            end 
+          else begin
+          p_out <= x[3:0];
+          p_rdy <= 1;
+          end 
+end
 
+end
+end
 
-
-
-
-
+endmodule
