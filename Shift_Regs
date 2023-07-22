@@ -30,9 +30,10 @@ always@(posedge clk, posedge rst)
             end 
           else begin 
               s_rdy <= '1;
-              if(s_vld && s_rdy) begin 
+              if(s_vld ) begin 
                     x <= {x[2:0],s_in};
                     s_out <= x[3];
+                  end
                   end
 end
 
