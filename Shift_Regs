@@ -1,0 +1,15 @@
+module shift_All (
+                /////clk-rst//////
+                input logic clk,
+                input logic rst,
+                //////serial in - out//////
+                input logic s_in,
+                input logic s_vld,
+                output logic s_rdy,
+                output logic s_out,
+
+                ///// parallel In - Out/////
+                input logic p_vld,
+                input logic [3:0] p_in,
+                output logic [3:0] p_out,
+                output logic p_rdy);
