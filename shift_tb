@@ -54,11 +54,127 @@ initial
     end 
 end 
 
+//////////////SIPO/////////////
+if(SIPO==1)
+begin 
+//////////Serial In- Parallel Out////////////////
+initial 
+  begin 
+    #1 clk=1'b0;
+    forever begin 
+      #1 clk = ~clk;
+        end 
+    end 
 
+initial 
+    begin 
+    #1
+    rst=1'b0;
+    #1
+    rst=1'b1;
+    #1
+    rst=1'b0;
+    end
+initial 
+  begin 
+    #4
+    repeat(100)@(negedge clk)
+    begin 
+      if(s_rdy) begin 
+                  s_in=$random; s_vld=$random;
+                  $display($time,"s_vld= %d; s_in= %d; p_out = %4d;", s_vld,s_in,p_out);
+                  end 
 
+      else begin 
+        s_in =1'b0;
+        s_vld=1'b0;
+        end 
+      end 
+      #100 $finish;
+    end 
+end 
 
+/////////////PISO/////////////////////
+if(PISO==1)
+begin 
+//////////Parallel In- Serial Out////////////////
+initial 
+  begin 
+    #1 clk=1'b0;
+    forever begin 
+      #1 clk = ~clk;
+        end 
+    end 
 
+initial 
+    begin 
+    #1
+    rst=1'b0;
+    #1
+    rst=1'b1;
+    #1
+    rst=1'b0;
+    end
+initial 
+  begin 
+    #4
+    repeat(100)@(negedge clk)
+    begin 
+      if(p_rdy) begin 
+                  p_in=$random; p_vld=$random;
+                  $display($time,"p_vld= %d; p_in= %d; s_out = %4d;", p_vld,p_in,s_out);
+                  end 
 
+      else begin 
+        p_in =1'b0;
+        p_vld=1'b0;
+        end 
+      end 
+      #100 $finish;
+    end 
+end 
+
+////////////////PIPO: Parallel In Paralle Oiut/////////////
+if(PIPO==1)
+begin 
+//////////Paralle In- Parallel Out////////////////
+initial 
+  begin 
+    #1 clk=1'b0;
+    forever begin 
+      #1 clk = ~clk;
+        end 
+    end 
+
+initial 
+    begin 
+    #1
+    rst=1'b0;
+    #1
+    rst=1'b1;
+    #1
+    rst=1'b0;
+    end
+initial 
+  begin 
+    #4
+    repeat(100)@(negedge clk)
+    begin 
+      if(s_rdy) begin 
+                  p_in=$random; p_vld=$random;
+                  $display($time,"p_vld= %d; p_in= %d; p_out = %4d;", p_vld,p_in,p_out);
+                  end 
+
+      else begin 
+        p_in =1'b0;
+        p_vld=1'b0;
+        end 
+      end 
+      #100 $finish;
+    end 
+end 
+
+endmodule
 
 
 
